@@ -1,0 +1,164 @@
+{
+  "CelebA": {
+    "5_o_Clock_Shadow": [
+      "no",
+      "yes"
+    ],
+    "Arched_Eyebrows": [
+      "no",
+      "yes"
+    ],
+    "Attractive": [
+      "no",
+      "yes"
+    ],
+    "Bags_Under_Eyes": [
+      "no",
+      "yes"
+    ],
+    "Bald": [
+      "no",
+      "yes"
+    ],
+    "Bangs": [
+      "no",
+      "yes"
+    ],
+    "Big_Lips": [
+      "no",
+      "yes"
+    ],
+    "Big_Nose": [
+      "no",
+      "yes"
+    ],
+    "Black_Hair": [
+      "no",
+      "yes"
+    ],
+    "Blond_Hair": [
+      "no",
+      "yes"
+    ],
+    "Blurry": [
+      "no",
+      "yes"
+    ],
+    "Brown_Hair": [
+      "no",
+      "yes"
+    ],
+    "Bushy_Eyebrows": [
+      "no",
+      "yes"
+    ],
+    "Chubby": [
+      "no",
+      "yes"
+    ],
+    "Double_Chin": [
+      "no",
+      "yes"
+    ],
+    "Eyeglasses": [
+      "no",
+      "yes"
+    ],
+    "Goatee": [
+      "no",
+      "yes"
+    ],
+    "Gray_Hair": [
+      "no",
+      "yes"
+    ],
+    "Heavy_Makeup": [
+      "no",
+      "yes"
+    ],
+    "High_Cheekbones": [
+      "no",
+      "yes"
+    ],
+    "Male": [
+      "no",
+      "yes"
+    ],
+    "Mouth_Slightly_Open": [
+      "no",
+      "yes"
+    ],
+    "Mustache": [
+      "no",
+      "yes"
+    ],
+    "Narrow_Eyes": [
+      "no",
+      "yes"
+    ],
+    "No_Beard": [
+      "no",
+      "yes"
+    ],
+    "Oval_Face": [
+      "no",
+      "yes"
+    ],
+    "Pale_Skin": [
+      "no",
+      "yes"
+    ],
+    "Pointy_Nose": [
+      "no",
+      "yes"
+    ],
+    "Receding_Hairline": [
+      "no",
+      "yes"
+    ],
+    "Rosy_Cheeks": [
+      "no",
+      "yes"
+    ],
+    "Sideburns": [
+      "no",
+      "yes"
+    ],
+    "Smiling": [
+      "no",
+      "yes"
+    ],
+    "Straight_Hair": [
+      "no",
+      "yes"
+    ],
+    "Wavy_Hair": [
+      "no",
+      "yes"
+    ],
+    "Wearing_Earrings": [
+      "no",
+      "yes"
+    ],
+    "Wearing_Hat": [
+      "no",
+      "yes"
+    ],
+    "Wearing_Lipstick": [
+      "no",
+      "yes"
+    ],
+    "Wearing_Necklace": [
+      "no",
+      "yes"
+    ],
+    "Wearing_Necktie": [
+      "no",
+      "yes"
+    ],
+    "Young": [
+      "no",
+      "yes"
+    ]
+  }
+}
