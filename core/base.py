@@ -4,6 +4,7 @@ import numpy as np
 import torch
 from torch.utils.tensorboard import SummaryWriter
 import time
+from tqdm import tqdm
 write = SummaryWriter("runs/log")
 
 
@@ -45,7 +46,7 @@ class Trainer(object):
         running_loss = 0.0
         running_corrects = 0.0
 
-        for count, (img, labels) in enumerate(self.train_loader):
+        for count, (img, labels) in enumerate(tqdm(self.train_loader)):
             if self.use_cuda:
                 img = img.cuda()
                 #alpha = attr_weights(labels.numpy())
@@ -61,7 +62,7 @@ class Trainer(object):
             self.optimizer.step()
             self.scheduler.step()
 
-            preds = torch.gt(pred_label, torch.ones_like(pred_label) * 0.6 )
+            preds = torch.gt(pred_label, torch.ones_like(pred_label) * 0.8 )
 
             running_loss += total_loss.item()
             running_corrects += torch.sum(preds == labels.byte()).item() / 11
@@ -109,7 +110,7 @@ class Tester(object):
                 #print(pre_val_labels ,labels)
                 #total_val_loss = criterion_ce(pre_val_labels, labels, alpha=alpha)
                 total_val_loss = criterion_ce(pre_val_labels, labels)
-                preds = torch.gt(pre_val_labels, torch.ones_like(pre_val_labels) * 0.6)
+                preds = torch.gt(pre_val_labels, torch.ones_like(pre_val_labels) * 0.8)
 
                 val_loss += total_val_loss.item()
                 val_corrects += torch.sum(preds == labels.byte()).item() / 11

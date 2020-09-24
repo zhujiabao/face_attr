@@ -25,9 +25,10 @@ class myDataset(Data.Dataset):
 
         #line_num = 0 # 计数器
         fp = open(img_txt, 'r')
+        self.num_class = len(fp.readlines()[1].split())
         for line in fp.readlines():
             #if line_num < 100:
-                if len(line.split()) != 12:
+                if len(line.split()) != self.num_class+1:
                     continue
                 img_list.append(line.split()[0])
                 img_label_single = []
@@ -48,8 +49,8 @@ class myDataset(Data.Dataset):
                                     #transforms.CenterCrop(32),
                                     transforms.RandomHorizontalFlip(),
                                     transforms.ToTensor(),
-                                    transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                                                         std=[0.5, 0.5, 0.5])
+                                    transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                                         std=[0.229, 0.224, 0.225])
                                 ])
 
         self.loader = loader
@@ -59,7 +60,7 @@ class myDataset(Data.Dataset):
 
     def __getitem__(self, index):
         img_path = self.imgs[index]
-        label = torch.from_numpy(np.array(self.labels[index])).float()
+        label = torch.from_numpy(np.array(self.labels[index])).long()
         #label = np.array(self.labels[index])
         img = self.loader(img_path)
         if self.transform is not None:
@@ -196,9 +197,11 @@ class myDataset(Data.Dataset):
 if __name__ == '__main__':
     # from config import  args
     # args = args()
-    #train_data= myDataset(img_dir=args.img_root, img_txt="../data/train.txt")
+    train_data= myDataset(img_dir="../data/img_align_celeba", img_txt="../data/train.txt")
+    print(train_data.num_class)
     #train_loader, val_loader = myDataset.split_dataset(dataset=train_data, batch_size=args.batch_size)
     #print(len(train_loader), len(val_loader))
-    print(myDataset.compute_attr_weights("../data/train.txt"))
+    #print(myDataset.compute_attr_weights("../data/train.txt"))
     # myDataset.split_trainandval("../data/Anno/list_attr_celeba.txt")
+    #myDataset.get_numclass(img_txt="../data/train.txt")
 

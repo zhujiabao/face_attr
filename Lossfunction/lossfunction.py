@@ -4,7 +4,7 @@ from torch.nn import functional as F
 import time
 
 class focal_loss(nn.Module):
-    def __init__(self, alpha = 0.25, gamma=2, num_class=40, size_average=True):
+    def __init__(self, alpha = 0.25, gamma=2, num_class=11, size_average=True):
         """
         focal_loss损失函数, -α(1-yi)**γ *ce_loss(xi,yi)
         步骤详细的实现了 focal_loss损失函数.
@@ -32,7 +32,7 @@ class focal_loss(nn.Module):
 
         self.gamma = gamma
 
-    def forward(self, preds, labels, alpha):
+    def forward(self, preds, labels):
         """
         focal_loss损失计算
         :param preds: 预测类别. size:[B,N,C] or [B,C]    分
@@ -40,19 +40,20 @@ class focal_loss(nn.Module):
         :param labels:  实际类别. size:[B,N] or [B]
         :return:
         """
-        self.alpha = torch.FloatTensor(alpha).cuda()
+        #self.alpha = torch.FloatTensor(alpha).cuda()
         preds = preds.view(-1, preds.size(-1))  #[2,40]
-        #self.alpha = self.alpha.cuda()
+        self.alpha = self.alpha.cuda()
         preds_softmax = F.softmax(preds, dim=1)
 
         preds_logsoft = torch.log(preds_softmax)
+        # preds_softmax = preds_softmax.gather(dim=1, index=labels)
+        # preds_logsoft = preds_logsoft.gather(1, labels)
         preds_softmax = preds_softmax.gather(dim=1, index=labels)
         preds_logsoft = preds_logsoft.gather(1, labels)
         self.alpha = self.alpha.gather(0, labels.view(-1))                         # [80]
         loss = -torch.mul(torch.pow((1-preds_softmax), self.gamma), preds_logsoft) #[2,40]
 
         loss = torch.mul(self.alpha, loss.view(-1))
-
         if self.size_average:
             loss = loss.mean()
         else:

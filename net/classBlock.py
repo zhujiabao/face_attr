@@ -32,7 +32,7 @@ class ClassBlock(nn.Module):
         add_block += [nn.Linear(input_dim, num_bottleneck)]
         add_block += [nn.BatchNorm1d(num_bottleneck)]
         add_block += [nn.LeakyReLU(0.1)]
-        add_block += [nn.Dropout(p=0.5)]
+        add_block += [nn.Dropout(p=0.6)]
 
         add_block = nn.Sequential(*add_block)
         add_block.apply(weights_init_kaiming)

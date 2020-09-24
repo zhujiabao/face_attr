@@ -14,12 +14,12 @@ from Lossfunction.lossfunction import focal_loss
 args = config.args()
 start_epoch = 0
 #获取训练集和验证集
-val_dir = "./data/val.txt"
 train_set= myDataset(img_dir=args.img_root, img_txt=args.train_txt)
+num_class = train_set.num_class
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size,
                                            shuffle=True, num_workers=2, drop_last=True)
 #print(train_loader)
-val_set= myDataset(img_dir=args.img_root, img_txt=val_dir)
+val_set= myDataset(img_dir=args.img_root, img_txt=args.val_dir)
 val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size,
                                            shuffle=True, num_workers=2, drop_last=True)
 #train_loader, val_loader = myDataset.split_dataset(dataset=dataset, batch_size=args.batch_size)
@@ -27,14 +27,15 @@ val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size,
 
 #获取模型结构
 if  args.pretrained:
-    model = resnet50(class_num=11,pretrained=args.pretrained)
+    model = resnet50(class_num=num_class,pretrained=args.pretrained)
     print("model load success")
 else:
-    model = resnet50()
+    model = resnet50(class_num=num_class)
 
 if args.use_gpu and torch.cuda.is_available():
     model.cuda()
 
+#定义优化器和损失函数
 #optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-8)
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
 exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2000, gamma=0.1)
@@ -46,13 +47,19 @@ exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2000, ga
 #                                                               cooldown= 0, min_lr= 0, eps= 0.0001)
 
 
-#定义优化器和损失函数
+#加载原模型继续训练
 if args.is_load_checkpoint:
     checkpoint = torch.load(args.checkpoint_file)
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     start_epoch = checkpoint['epoch']
     exp_lr_scheduler.last_epoch = start_epoch
+
+#定义loss function
+if args.lossfunc == "focalloss":
+    loss = focal_loss()
+else:
+    loss = nn.BCELoss()
 
 #plt
 train_loss_list = []
@@ -68,8 +75,6 @@ if args.train == "train":
     tester = Tester(val_loader=val_loader, model=model,
                     batch_size=args.batch_size, use_cuda=args.use_gpu)
     # epoch训练
-    loss = nn.BCELoss()
-    #loss = focal_loss()
     for epoch in range(start_epoch, args.epoch):
         train_loss, train_acc=trainer.train(epoch=epoch, criterion_ce=loss)
         val_loss, val_acc=tester.val_test(epoch=epoch, current_model=trainer.model, criterion_ce=loss)

@@ -1,6 +1,6 @@
 from torchvision import models
 from torch import nn
-from classBlock import ClassBlock
+from net.classBlock import ClassBlock
 import torch
 
 
