@@ -61,7 +61,7 @@ class Trainer(object):
             self.optimizer.step()
             self.scheduler.step()
 
-            preds = torch.gt(pred_label, torch.ones_like(pred_label)/2)
+            preds = torch.gt(pred_label, torch.ones_like(pred_label) * 0.6 )
 
             running_loss += total_loss.item()
             running_corrects += torch.sum(preds == labels.byte()).item() / 11
@@ -109,7 +109,7 @@ class Tester(object):
                 #print(pre_val_labels ,labels)
                 #total_val_loss = criterion_ce(pre_val_labels, labels, alpha=alpha)
                 total_val_loss = criterion_ce(pre_val_labels, labels)
-                preds = torch.gt(pre_val_labels, torch.ones_like(pre_val_labels) / 2)
+                preds = torch.gt(pre_val_labels, torch.ones_like(pre_val_labels) * 0.6)
 
                 val_loss += total_val_loss.item()
                 val_corrects += torch.sum(preds == labels.byte()).item() / 11

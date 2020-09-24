@@ -29,12 +29,14 @@ class resnet50(nn.Module):
 
 
 if __name__ == "__main__":
-    model = resnet50(class_num=40).cuda()
+    #model = resnet50(class_num=11).cuda()
     #input = torch.randn(size=(1,3,224,224), dtype=torch.float32)
     #print(model)
-    from torchsummary import summary
-    summary(model, (3,224,224))
+    # from torchsummary import summary
+    # summary(model, (3,224,224))
     #
-    # model = resnet50(class_num=40)
-    # tet = torch.Tensor(1, 3, 224, 224)
-    # print(model(tet))
+    model = resnet50(class_num=40)
+    tet = torch.Tensor(2, 3, 224, 224)
+
+    print(torch.ones_like(tet) * 0.6)
+    #print(model(tet))         * 0.6

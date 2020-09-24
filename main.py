@@ -41,6 +41,10 @@ exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2000, ga
 # exp_lr_scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer,  base_lr=args.lr, max_lr=0.005, step_size_up=20000, step_size_down=20000,
 #                                                      scale_fn=None, scale_mode='cycle',cycle_momentum=False)
 
+#自适应学习率ReduceLROnPlaateau
+# exp_lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.8, verbose=True, threshold=0.001, threshold_mode="rel",
+#                                                               cooldown= 0, min_lr= 0, eps= 0.0001)
+
 
 #定义优化器和损失函数
 if args.is_load_checkpoint:
@@ -85,7 +89,7 @@ if args.train == "train":
                       "lr": optimizer.param_groups[0]['lr']}
         save_model_file = os.path.join(args.save_model, 'net_%s.pkl'%epoch)
         #print(save_model_file)
-        #torch.save(checkpoint, save_model_file)
+        torch.save(checkpoint, save_model_file)
 
     draw(train_loss=train_loss_list, train_acc=train_acc_list, val_loss=val_loss_list, val_acc=val_acc_list, epocch=epoch_list)
 

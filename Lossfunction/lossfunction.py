@@ -41,33 +41,21 @@ class focal_loss(nn.Module):
         :return:
         """
         self.alpha = torch.FloatTensor(alpha).cuda()
-        print("alpha = ",self.alpha)
-       # print(self.alpha)
         preds = preds.view(-1, preds.size(-1))  #[2,40]
-        #print(preds.device)
         #self.alpha = self.alpha.cuda()
-        print("preds = ", preds)
         preds_softmax = F.softmax(preds, dim=1)
-        print("preds_softmax = ", preds_softmax)
-        #print("aaa",preds_softmax.size())
+
         preds_logsoft = torch.log(preds_softmax)
-        print("preds_logsoft = ", preds_logsoft)
-        #print("---",labels.view(-1,1).size())
         preds_softmax = preds_softmax.gather(dim=1, index=labels)
         preds_logsoft = preds_logsoft.gather(1, labels)
         self.alpha = self.alpha.gather(0, labels.view(-1))                         # [80]
         loss = -torch.mul(torch.pow((1-preds_softmax), self.gamma), preds_logsoft) #[2,40]
-        print("loss=",loss)
-        # print(self.alpha.size())
-        # print(loss.size())
+
         loss = torch.mul(self.alpha, loss.view(-1))
-        print("alpha*loss=",loss)
 
         if self.size_average:
             loss = loss.mean()
-            print("loss_mean=", loss)
         else:
             loss = loss.sum()
-        time.sleep(100000)
         return loss
 

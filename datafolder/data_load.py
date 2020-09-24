@@ -114,14 +114,14 @@ class myDataset(Data.Dataset):
             for i in range(numofimgs):
                 line = f.readline()
                 items = line.split()[1:]
-                print(line.split()[0] ,len(items))
+                #print(line.split()[0] ,len(items))
                 for j in range(len(attrs)):
                     if items[j] == "1":
                         stats[j][0] += 1
                     else:
                         stats[j][1] += 1
             for i in range(len(attrs)):
-                print(attrs[i], stats[i][0]+stats[i][1])
+                print(attrs[i], stats[i][0], stats[i][1])
 
 
     def split_trainandval(dir):
@@ -142,29 +142,63 @@ class myDataset(Data.Dataset):
                     info = info + " " + attrs[i]
                 train_txt.write(info+"\r\n")
                 val_txt.write(info+"\r\n")
+                c_1 = 0
+                c_2 = 0
+                c_3 = 0
+                c_4 = 0
                 for i in range(numofimgs):
                     line = f.readline()
                     img_path = line.split()[0]
                     items = line.split()[1:]
                     #info_2 = ""
-                    if i % 2 ==0 or i%3==0:
-                        for i in range(len(list)):
-                            img_path = img_path + " " + items[list[i]]
-                        train_txt.write(img_path+"\r\n")
-                    else:
-                        for i in range(len(list)):
-                            img_path = img_path + " " + items[list[i]]
-                        val_txt.write(img_path+"\r\n")
+                    for j in range(len(list)):
+                        img_path = img_path + " " + items[list[j]]
+                    if items[15] == "1":
+                        c_1 += 1
+                        if c_1 % 2 ==0 or c_1%3==0 or c_1%5==0:
+                            train_txt.write(img_path + "\r\n")
+                            train_txt.write(img_path + "\r\n")
+                        else:
+                            val_txt.write(img_path+"\r\n")
+
+                    elif items[8] == "1":
+                        c_2 += 1
+                        if c_2 % 2 == 0 or c_2 % 3 == 0 or c_2 % 5 == 0:
+                            train_txt.write(img_path + "\r\n")
+                        else:
+                            val_txt.write(img_path + "\r\n")
+                    elif items[9] == "1":
+                        c_3 += 1
+                        if c_3 % 2 == 0 or c_3 % 3 == 0 or c_3%5 == 0:
+                            train_txt.write(img_path + "\r\n")
+                        else:
+                            val_txt.write(img_path + "\r\n")
+                    elif items[11] == "1" :
+                        c_4 += 1
+                        if c_4 % 2 == 0 or c_4 % 3 == 0 or c_4 % 5 == 0:
+                            train_txt.write(img_path + "\r\n")
+                        else:
+                            val_txt.write(img_path + "\r\n")
+
+                    #print(c_1, c_4,c_2, c_3)
+                    # if i % 2 ==0 or i%3==0:
+                    #     for j in range(len(list)):
+                    #         img_path = img_path + " " + items[list[j]]
+                    #     train_txt.write(img_path+"\r\n")
+                    # else:
+                    #     for j in range(len(list)):
+                    #         img_path = img_path + " " + items[list[j]]
+                    #     val_txt.write(img_path+"\r\n")
 
 
 
 
 if __name__ == '__main__':
-    from config import  args
-    args = args()
-    train_data= myDataset(img_dir=args.img_root, img_txt="../data/train.txt")
+    # from config import  args
+    # args = args()
+    #train_data= myDataset(img_dir=args.img_root, img_txt="../data/train.txt")
     #train_loader, val_loader = myDataset.split_dataset(dataset=train_data, batch_size=args.batch_size)
     #print(len(train_loader), len(val_loader))
     print(myDataset.compute_attr_weights("../data/train.txt"))
-    #myDataset.split_trainandval("../data/Anno/list_attr_celeba.txt")
+    # myDataset.split_trainandval("../data/Anno/list_attr_celeba.txt")
 
