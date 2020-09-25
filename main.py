@@ -19,11 +19,10 @@ num_class = train_set.num_class
 train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size,
                                            shuffle=True, num_workers=2, drop_last=True)
 #print(train_loader)
-val_set= myDataset(img_dir=args.img_root, img_txt=args.val_dir)
+val_set= myDataset(img_dir=args.img_root, img_txt=args.val_txt)
 val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size,
                                            shuffle=True, num_workers=2, drop_last=True)
 #train_loader, val_loader = myDataset.split_dataset(dataset=dataset, batch_size=args.batch_size)
-#data_size = len(train_loader)
 
 #获取模型结构
 if  args.pretrained:
@@ -96,7 +95,7 @@ if args.train == "train":
         #print(save_model_file)
         torch.save(checkpoint, save_model_file)
 
-    draw(train_loss=train_loss_list, train_acc=train_acc_list, val_loss=val_loss_list, val_acc=val_acc_list, epocch=epoch_list)
+    draw(train_loss=train_loss_list, train_acc=train_acc_list, val_loss=val_loss_list, val_acc=val_acc_list, epoch=epoch_list)
 
 else:
     tester = Tester(val_loader=val_loader, model=model,

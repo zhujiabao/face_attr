@@ -69,7 +69,7 @@ class Trainer(object):
 
             write.add_scalar("Training loss",total_loss.item() , epoch*len(self.train_loader) + count)
             write.add_scalar("lr", self.optimizer.param_groups[0]['lr'],  epoch*len(self.train_loader) + count)
-            if count%20 == 0:
+            if count%50 == 0:
                 print("Epoch {} step {} training loss {:.4f} ".format(epoch, epoch*len(self.train_loader) + count, total_loss.item()))
                 # print("Epoch {}/{} train step: {}/{}  |  train labels loss: {:.4f}".format(epoch, self.enpochs,
                 #                                                                count * self.batch_size,
