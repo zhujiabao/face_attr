@@ -24,8 +24,10 @@ class myDataset(Data.Dataset):
         img_labels = []
 
         #line_num = 0 # 计数器
+        fx = open(img_txt, 'r')
+        self.num_class = len(fx.readlines()[1].split())
+        #print(self.num_class)
         fp = open(img_txt, 'r')
-        self.num_class = len(fp.readlines()[1].split())
         for line in fp.readlines():
             #if line_num < 100:
                 if len(line.split()) != self.num_class+1:
@@ -70,6 +72,7 @@ class myDataset(Data.Dataset):
                 print('Cannot transform image: {}'.format(img_path))
 
         return img, label
+
 
     def split_dataset(dataset, batch_size):
         data_size = len(dataset)
@@ -198,7 +201,7 @@ if __name__ == '__main__':
     # from config import  args
     # args = args()
     train_data= myDataset(img_dir="../data/img_align_celeba", img_txt="../data/train.txt")
-    print(train_data.num_class)
+    print(len(train_data))
     #train_loader, val_loader = myDataset.split_dataset(dataset=train_data, batch_size=args.batch_size)
     #print(len(train_loader), len(val_loader))
     #print(myDataset.compute_attr_weights("../data/train.txt"))

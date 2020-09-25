@@ -40,7 +40,7 @@ class Trainer(object):
 
 
 
-    def train(self, epoch, criterion_ce):
+    def train(self, epoch, criterion_ce, numclass):
         self.model.train(True)
 
         running_loss = 0.0
@@ -65,7 +65,7 @@ class Trainer(object):
             preds = torch.gt(pred_label, torch.ones_like(pred_label) * 0.8 )
 
             running_loss += total_loss.item()
-            running_corrects += torch.sum(preds == labels.byte()).item() / 11
+            running_corrects += torch.sum(preds == labels.byte()).item() / numclass
 
             write.add_scalar("Training loss",total_loss.item() , epoch*len(self.train_loader) + count)
             write.add_scalar("lr", self.optimizer.param_groups[0]['lr'],  epoch*len(self.train_loader) + count)
@@ -92,7 +92,7 @@ class Tester(object):
         self.use_cuda = use_cuda
 
 
-    def val_test(self, epoch, criterion_ce,current_model=None):
+    def val_test(self, epoch, criterion_ce, numclass,current_model=None):
         if current_model:
             self.model = current_model
         self.model.eval()
@@ -113,7 +113,7 @@ class Tester(object):
                 preds = torch.gt(pre_val_labels, torch.ones_like(pre_val_labels) * 0.8)
 
                 val_loss += total_val_loss.item()
-                val_corrects += torch.sum(preds == labels.byte()).item() / 11
+                val_corrects += torch.sum(preds == labels.byte()).item() / numclass
 
                 #if count % 100 == 0:
                 write.add_scalar("val loss", total_val_loss.item(), epoch*len(self.val_loader) + count)

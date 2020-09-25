@@ -75,8 +75,8 @@ if args.train == "train":
                     batch_size=args.batch_size, use_cuda=args.use_gpu)
     # epoch训练
     for epoch in range(start_epoch, args.epoch):
-        train_loss, train_acc=trainer.train(epoch=epoch, criterion_ce=loss)
-        val_loss, val_acc=tester.val_test(epoch=epoch, current_model=trainer.model, criterion_ce=loss)
+        train_loss, train_acc=trainer.train(epoch=epoch, criterion_ce=loss, numclass=num_class)
+        val_loss, val_acc=tester.val_test(epoch=epoch, current_model=trainer.model, criterion_ce=loss, numclass=num_class)
         #exp_lr_scheduler.step()
         print("Epoch: {}/{} lr:{:.4f} train loss:{:.4f} train Acc:{:.4f} Val loss{:.4f} Val Acc:{:.4f}".format(epoch, args.epoch,
                                                                                                                optimizer.param_groups[0]['lr'], train_loss, train_acc, val_loss, val_acc))
@@ -100,6 +100,6 @@ if args.train == "train":
 else:
     tester = Tester(val_loader=val_loader, model=model,
                     batch_size=args.batch_size, use_cuda=args.use_gpu)
-    tester.val_test(epoch=0)
+    tester.val_test(epoch=0, numclass=num_class)
 
 
