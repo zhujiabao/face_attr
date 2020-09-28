@@ -117,15 +117,20 @@ class myDataset(Data.Dataset):
                 stats.append(stat)
             for i in range(numofimgs):
                 line = f.readline()
-                items = line.split()[1:]
+                items = line.split()[1:][0].split(",")
+                #print(len(items))
+                # print(items[0])
+                # print(len(items))
+                #print(items)
                 #print(line.split()[0] ,len(items))
+                #print(len(attrs))
                 for j in range(len(attrs)):
                     if items[j] == "1":
                         stats[j][0] += 1
                     else:
                         stats[j][1] += 1
             for i in range(len(attrs)):
-                print(attrs[i], stats[i][0], stats[i][1])
+                print(attrs[i], stats[i][0], stats[i][1], stats[i][0]/(stats[i][0]+stats[i][1]))
 
 
     def split_trainandval(dir):
@@ -200,11 +205,11 @@ class myDataset(Data.Dataset):
 if __name__ == '__main__':
     # from config import  args
     # args = args()
-    train_data= myDataset(img_dir="../data/img_align_celeba", img_txt="../data/train.txt")
-    print(len(train_data))
+    #train_data= myDataset(img_dir="../data/img_align_celeba", img_txt="../data/train.txt")
+    #print(len(train_data))
     #train_loader, val_loader = myDataset.split_dataset(dataset=train_data, batch_size=args.batch_size)
     #print(len(train_loader), len(val_loader))
-    #print(myDataset.compute_attr_weights("../data/train.txt"))
+    print(myDataset.compute_attr_weights("../data/LFWA/val.txt"))
     # myDataset.split_trainandval("../data/Anno/list_attr_celeba.txt")
     #myDataset.get_numclass(img_txt="../data/train.txt")
 

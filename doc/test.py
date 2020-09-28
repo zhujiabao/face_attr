@@ -18,12 +18,12 @@ class predict_decoder(object):
         self.dataset = dataset
         self.num_label = len(self.label_list)
 
-    def decode(self, pred):
+    def decode(self, pred, source):
         #pred = pred.squeeze(dim=0)
         for idx in range(self.num_label):
             name, chooce = self.label_list[idx], self.attribute_dict[self.label_list[idx]][pred[idx]]
             #if chooce
-            print('{}: {}'.format(name, chooce))
+            print('{}: {} source: {}'.format(name, chooce, source[idx]))
             #return name, chooce
 
 
@@ -45,4 +45,4 @@ if __name__ == '__main__':
     pred = torch.gt(out, torch.ones_like(out) * 0.8)
 
     dec = predict_decoder(dataset="CelebA", list=[6, 7, 8, 9, 11, 15, 20, 31, 32, 25, 33])
-    dec.decode(pred=pred)
+    dec.decode(pred=pred, source = out.data.cpu().numpy())

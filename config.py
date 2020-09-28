@@ -6,12 +6,12 @@ def args():
     parser.add_argument("--img_root", type=str, default="./data/img_align_celeba/")
     parser.add_argument("--train_txt", type=str, default="./data/train.txt")
     parser.add_argument("--val_txt", type=str, default="./data/val.txt")
-    parser.add_argument("--batch_size", type=int, default=16)
-    parser.add_argument("--epoch",type=int, default=60)
+    parser.add_argument("--batch_size", type=int, default=128)
+    parser.add_argument("--epoch",type=int, default=200)
     parser.add_argument("--lr", type=float, default=1e-2)
     parser.add_argument("--use_gpu", type=bool, default=True)
     parser.add_argument("--is_load_checkpoint", type=bool, default=False)
-    parser.add_argument("--lossfunc", type=str, default="focalloss", help="focalloss/bceloss")
+    parser.add_argument("--lossfunc", type=str, default="bceloss", help="focalloss/bceloss")
     parser.add_argument("--checkpoint_file", type=str, default="")
     parser.add_argument("--pretrained", type=bool, default=True, help="false means don't load pretrain model, True means load")
     parser.add_argument("--model_file", type=str, default="model/resnet50-19c8e357.pth", help="load the pretrain model")
@@ -20,5 +20,3 @@ def args():
 
 
     return parser.parse_args()
-
-#args = args()
