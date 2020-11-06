@@ -1,7 +1,7 @@
 import torch
 from net.model import resnet50
 import torchvision
-pthfile = './model/resnet50-19c8e357.pth'
+pthfile = './model_xioayin/resnet50-19c8e357.pth'
 net =torchvision.models.resnet50(pretrained=True)
 pretrained_dict =net.state_dict()
 
@@ -15,7 +15,7 @@ model_dict = model.state_dict()
 pretrained_dict =  {k: v for k, v in pretrained_dict.items() if k in model_dict}
 model_dict.update(pretrained_dict)
 model.load_state_dict(model_dict)
-#model.load_state_dict(torch.load(pthfile), False)
+#model_xioayin.load_state_dict(torch.load(pthfile), False)
 for name, param in model.named_parameters():
     print(name, param)
 

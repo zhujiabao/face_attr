@@ -1,5 +1,5 @@
 import config
-from net.moudle import resnet50
+from net.mobilenet_v3 import MobileNetV3_Small
 import torch
 from datafolder.data_load import myDataset
 from core.base import Trainer, Tester
@@ -25,27 +25,27 @@ val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size,
 
 # 获取模型结构
 if args.pretrained:
-    model = resnet50(class_num=num_class, pretrained=args.pretrained)
-    print("model load success")
+    model = MobileNetV3_Small(class_num=num_class)
+    print("MobileNetV3_Small load success")
 else:
-    model = resnet50(class_num=num_class)
+    model = MobileNetV3_Small(class_num=num_class)
 
 if args.use_gpu and torch.cuda.is_available():
     model.cuda()
 
 # 定义优化器和损失函数
-# optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-8)
+# optimizer = optim.Adam(model_xioayin.parameters(), lr=args.lr, weight_decay=1e-8)
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
 # exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20000, gamma=0.6)
 # exp_lr_scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer,  base_lr=args.lr, max_lr=0.005, step_size_up=20000, step_size_down=20000,
 #                                                      scale_fn=None, scale_mode='cycle',cycle_momentum=False)
-ignored_params = list(map(id, model.features.parameters()))
-classifier_params = filter(lambda p: id(p) not in ignored_params, model.parameters())
-optimizer = torch.optim.SGD([
-    {'params': model.features.parameters(), 'lr': 0.001},
-    {'params': classifier_params, 'lr': 0.01},
-], momentum=0.9, weight_decay=5e-4, nesterov=True)
-exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=40000, gamma=0.2)
+#ignored_params = list(map(id, model.features.parameters()))
+#classifier_params = filter(lambda p: id(p) not in ignored_params, model.parameters())
+# optimizer = torch.optim.SGD([
+#     {'params': model.features.parameters(), 'lr': 0.001},
+#     {'params': classifier_params, 'lr': 0.01},
+# ], momentum=0.9, weight_decay=5e-4, nesterov=True)
+exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=40000, gamma=0.9)
 
 # 加载原模型继续训练
 if args.is_load_checkpoint:

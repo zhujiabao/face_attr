@@ -4,9 +4,9 @@ import math
 from net.classBlock import ClassBlock
 
 def resnet50(pretrained=False, **kwargs):
-    """Constructs a ResNet-50 model.
+    """Constructs a ResNet-50 model_xioayin.
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a model_xioayin pre-trained on ImageNet
     """
     model = ResNet([3,4,6,3], **kwargs)
     if pretrained:
@@ -15,9 +15,9 @@ def resnet50(pretrained=False, **kwargs):
 
 
 def resnet101(pretrained=False, **kwargs):
-    """Constructs a ResNet-101 model.
+    """Constructs a ResNet-101 model_xioayin.
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a model_xioayin pre-trained on ImageNet
     """
     model = ResNet([3, 4, 23, 3], **kwargs)
     if pretrained:
@@ -146,7 +146,7 @@ class Bottleneck(nn.Module):
 if __name__ == "__main__":
     model = resnet50().cuda()
     #input = torch.randn(size=(1,3,224,224), dtype=torch.float32)
-    #print(model)
+    #print(model_xioayin)
     from torchsummary import summary
     summary(model, (3,224,224))
 
