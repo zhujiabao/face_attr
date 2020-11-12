@@ -11,10 +11,50 @@ def default_loader(path):
     try:
         img = Image.open(path)
         img = img.resize((224,224))
+
         #print(img)
         return img.convert('RGB')
     except:
         print("Can not open {0}".format(path))
+
+
+class load_dataset(Data.Dataset):
+  def __init__(self, data_set, transform=None,loader=default_loader):
+    img_list = []
+    img_label = []
+
+    self.loader = loader
+    for i in range(len(data_set)):
+      img_list.append(data_set[i][0])
+      img_label.append(data_set[i][1])
+
+    self.img_list =[file for file in img_list]
+    self.label = img_label
+    if transform is None:
+      self.transform = transforms.Compose([
+                            transforms.Resize(224), #224
+                            #transforms.CenterCrop(32),
+                            transforms.RandomHorizontalFlip(),
+                            transforms.ToTensor(),
+                            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                                  std=[0.229, 0.224, 0.225])
+                        ])
+
+  def __len__(self):
+    return len(self.img_list)
+
+  def __getitem__(self, index):
+    img_path = self.img_list[index]
+    label = self.label[index]
+    img = self.loader(img_path)
+    if self.transform is not None:
+      try:
+        img = self.transform(img)
+      except:
+        print('Cannot transform image: {}'.format(img_path))
+    return img, label
+
+
 
 
 
@@ -45,6 +85,7 @@ class myDataset(Data.Dataset):
         self.imgs = [os.path.join(img_dir, file) for file in img_list]
         #print("imgs",self.imgs)
         self.labels = img_labels
+        self.transform = transform
         if transform is None:
             self.transform = transforms.Compose([
                                     transforms.Resize(224), #224
@@ -62,16 +103,18 @@ class myDataset(Data.Dataset):
 
     def __getitem__(self, index):
         img_path = self.imgs[index]
-        label = torch.from_numpy(np.array(self.labels[index])).long()
+        label = torch.from_numpy(np.array(self.labels[index])).float()
         #label = np.array(self.labels[index])
-        img = self.loader(img_path)
-        if self.transform is not None:
-            try:
-                img = self.transform(img)
-            except:
-                print('Cannot transform image: {}'.format(img_path))
-
-        return img, label
+        #if self.transform is not None:
+        if self.transform is None:
+          img = self.loader(img_path)
+          try:
+            img = self.transform(img)
+          except:
+               print('Cannot transform image: {}'.format(img_path))
+          return img, label
+        else:
+          return img_path, label
 
 
     def split_dataset(dataset, batch_size):
